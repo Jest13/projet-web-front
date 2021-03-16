@@ -5,21 +5,34 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "axios";
 
 function App() {
-  const [latest, setLatest] = useState("")
-
+  const [latest, setLatest] = useState([]);
+  const [results, setResults] = useState([]);
 
   // connexion api 
   useEffect(() => {
     axios
-    .get("https://corona.lmao.ninja/v3/covid-19/all")
-    .then(res => {
-    console.log(res.data);
+    .all([
+    //donnees general
+    axios.get("https://corona.lmao.ninja/v3/covid-19/all"),
+    //donnes par pays 
+    axios.get("https://corona.lmao.ninja/v3/covid-19/countries")
+    ])
+    .then(responseArr => {
+    setLatest(responseArr[0].data);
+    setResults(responseArr[1].data);
     })
     .catch(err => {
      console.log(err);
     });
   }, []);
+// initialisation du timer update des donnees 
 
+
+    const date = new Date(parseInt(latest.updated)); 
+    const lastUpdated = date.toString();
+ 
+  
+//tableau des donnees
   return (
     <div>
       <CardGroup>
@@ -27,35 +40,107 @@ function App() {
           <Card.Body>
             <Card.Title>Cas</Card.Title>
             <Card.Text>
-              test
+             {latest.cases}
       </Card.Text>
           </Card.Body>
           <Card.Footer>
-            <small>Last updated 3 mins ago</small>
+            <small>Derniere mise à jour: {lastUpdated} </small>
           </Card.Footer>
         </Card>
         <Card bg="danger">
           <Card.Body>
             <Card.Title>Mort(s)</Card.Title>
             <Card.Text>
-              0
+            {latest.deaths}
       </Card.Text>
           </Card.Body>
           <Card.Footer>
-            <small>Last updated 3 mins ago</small>
+            <small>Derniere mise à jour: {lastUpdated}</small>
           </Card.Footer>
         </Card>
         <Card bg="success">
           <Card.Body>
-            <Card.Title>Case</Card.Title>
+            <Card.Title>Gueris</Card.Title>
             <Card.Text>
-              This is a wider card with supporting text below as a natural lead-in to
-              additional content. This card has even longer content than the first to
-              show that equal height action.
+             {latest.recovered}
       </Card.Text>
           </Card.Body>
           <Card.Footer>
-            <small>Last updated 3 mins ago</small>
+            <small>Derniere mise à jour: {lastUpdated}</small>
+          </Card.Footer>
+        </Card>
+      </CardGroup>
+
+      <CardGroup>
+        <Card bg="warning">
+          <Card.Body>
+            <Card.Title>Cas aujourd'hui</Card.Title>
+            <Card.Text>
+            {latest.todayCases}
+      </Card.Text>
+          </Card.Body>
+          <Card.Footer>
+            <small>Derniere mise à jour: {lastUpdated}</small>
+          </Card.Footer>
+        </Card>
+        <Card bg="danger">
+          <Card.Body>
+            <Card.Title>Mort(s) aujourd'hui</Card.Title>
+            <Card.Text>
+            {latest.todayDeaths}
+      </Card.Text>
+          </Card.Body>
+          <Card.Footer>
+            <small>Derniere mise à jour: {lastUpdated}</small>
+          </Card.Footer>
+        </Card>
+        <Card bg="success">
+          <Card.Body>
+            <Card.Title>Gueris aujourd'hui</Card.Title>
+            <Card.Text>
+            {latest.todayRecovered}
+      </Card.Text>
+          </Card.Body>
+          <Card.Footer>
+            <small>Derniere mise à jour: {lastUpdated}</small>
+          </Card.Footer>
+        </Card>
+      </CardGroup>
+
+
+
+      <CardGroup>
+        <Card bg="warning">
+          <Card.Body>
+            <Card.Title>Cas toujours actif</Card.Title>
+            <Card.Text>
+            {latest.active}
+      </Card.Text>
+          </Card.Body>
+          <Card.Footer>
+            <small>Derniere mise à jour: {lastUpdated}</small>
+          </Card.Footer>
+        </Card>
+        <Card bg="danger">
+          <Card.Body>
+            <Card.Title>Cas critique</Card.Title>
+            <Card.Text>
+            {latest.critical}
+      </Card.Text>
+          </Card.Body>
+          <Card.Footer>
+            <small>Derniere mise à jour: {lastUpdated}</small>
+          </Card.Footer>
+        </Card>
+        <Card bg="success">
+          <Card.Body>
+            <Card.Title>Test effectué(s)</Card.Title>
+            <Card.Text>
+            {latest.tests}
+      </Card.Text>
+          </Card.Body>
+          <Card.Footer>
+            <small>Derniere mise à jour: {lastUpdated}</small>
           </Card.Footer>
         </Card>
       </CardGroup>
