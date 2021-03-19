@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
+
 import Card from 'react-bootstrap/Card';
 import CardGroup from "react-bootstrap/CardGroup";
+import CardColumns from "react-bootstrap/CardColumns";
+
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 import axios from "axios";
 
 function App() {
@@ -30,6 +34,33 @@ function App() {
 
     const date = new Date(parseInt(latest.updated)); 
     const lastUpdated = date.toString();
+
+    const countries = results.map((data, i) => {
+      return (
+<Card
+key={i}
+bg="light"
+text="dark"
+className="text-center"
+style={{ margin: "10px"}}
+>
+<Card.Img variant="top" src={data.countryInfo.flag} />
+<Card.Body>
+  <Card.Title>{data.country}</Card.Title>
+  <Card.Text>Cas : {data.cases}</Card.Text>
+  <Card.Text>Mort(s) : {data.deaths}</Card.Text>
+  <Card.Text>Gueris : {data.recovered}</Card.Text>
+  <Card.Text>Cas aujourd'hui : {data.todayCases}</Card.Text>
+  <Card.Text>Mort(s) aujourd'hui : {data.todayDeaths}</Card.Text>
+  <Card.Text>Cas actif : {data.active}</Card.Text>
+  <Card.Text>Cas critique : (hospitalisé/réanimation) {data.critical}</Card.Text>
+  <Card.Text>Cas : {data.cases}</Card.Text>
+</Card.Body>
+</Card>
+);
+});
+
+
  
   
 //tableau des donnees
@@ -144,6 +175,11 @@ function App() {
           </Card.Footer>
         </Card>
       </CardGroup>
+
+      <CardColumns>
+      {countries}
+      </CardColumns>
+      
     </div>
   );
 }
