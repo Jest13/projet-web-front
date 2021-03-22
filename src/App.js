@@ -3,9 +3,16 @@ import React, { useEffect, useState } from "react";
 import Card from 'react-bootstrap/Card';
 import CardGroup from "react-bootstrap/CardGroup";
 import CardColumns from "react-bootstrap/CardColumns";
-import Form from 'react-bootstrap/Form'
+import Form from 'react-bootstrap/Form';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 import axios from "axios";
+
+import Covid19 from './components/Covid19';
+
+
+
 
 function App() {
   const [latest, setLatest] = useState([]);
@@ -18,8 +25,10 @@ function App() {
       .all([
         //donnees general
         axios.get("https://corona.lmao.ninja/v3/covid-19/all"),
-        //donnes par pays 
-        axios.get("https://corona.lmao.ninja/v3/covid-19/countries")
+        //donnees par pays 
+        axios.get("https://corona.lmao.ninja/v3/covid-19/countries"),
+        //donnees vaccination 
+        axios.get("https://corona.lmao.ninja/v3/covid-19/vaccine/coverage/countries")
       ])
       .then(responseArr => {
         setLatest(responseArr[0].data);
@@ -188,6 +197,10 @@ function App() {
         </Card>
       </CardGroup>
 
+    <div>
+      <Covid19 />
+    </div>
+
       <Form>
         <Form.Group controlId="formGroup">
           <Form.Control 
@@ -196,6 +209,8 @@ function App() {
           onChange={e => setSearchCountries(e.target.value)} />
         </Form.Group>
       </Form>
+
+      
 
       <CardColumns queries={queries}>
         {countries}
@@ -206,3 +221,4 @@ function App() {
 }
 
 export default App;
+
